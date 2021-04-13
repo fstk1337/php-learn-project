@@ -62,9 +62,11 @@
                             </div>
                             <div class="col-xl-6 ml-auto mr-auto">
                                 <div class="card p-4 rounded-plus bg-faded">
-                                    <div class="alert alert-danger text-dark" role="alert"<?php if(!$_SESSION["error"]) {echo " hidden";} unset($_SESSION["error"]);?>>
-                                        <strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.
+                                    <?php if(isset($_SESSION["danger"])):?>
+                                    <div class="alert alert-danger text-dark" role="alert">
+                                        <?php echo $_SESSION["danger"]; unset($_SESSION["danger"]);?>
                                     </div>
+                                    <?php endif;?>
                                     <form id="js-login" novalidate="" action="register.php" method="post">
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>

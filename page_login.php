@@ -36,9 +36,9 @@
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?php if(isset($_SESSION["message"])):?>
+            <?php if(isset($_SESSION["success"])):?>
             <div class="alert alert-success">
-                <?php echo $_SESSION["message"]; unset($_SESSION["message"])?>
+                <?php echo $_SESSION["success"]; unset($_SESSION["success"])?>
             </div>
             <?php endif;?>
             <form action="">
