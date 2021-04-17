@@ -2,20 +2,35 @@
 
 function connect()
 {
-    return new PDO("mysql:host=localhost;dbname=projectdb;charset=utf8", 'root', 'root');
+    return new PDO("mysql:host=localhost;dbname=project_db;charset=utf8", 'root', 'root');
 }
 
-function getEmails($con)
+function get_value($field, $value)
 {
-    $sql = "SELECT email FROM `users`";
-    $statement = $con->prepare($sql);
-    $statement->execute();
-    return $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+    $connection = connect();
+    $sql = "SELECT * FROM users WHERE " . $field . " = :value";
+    $statement = $connection->prepare($sql);
+    $statement->execute(array("value" => $value));
+    return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
-function makeRecord($con, $email, $pass)
+function create_user($email, $password)
 {
-    $sql = "INSERT INTO `users` (email, password) VALUES (:email, :pass)";
-    $statement = $con->prepare($sql);
-    $statement->execute(array(':email' => $email, ':pass' => $pass));
+    $connection = connect();
+    $sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
+    $statement = $connection->prepare($sql);
+    $statement->execute(array("email" => $email, "password" => password_hash($password, PASSWORD_DEFAULT)));
+}
+
+function set_message($name, $text) {
+    $_SESSION[$name] = $text;
+}
+
+function send_message($name) {
+    echo $_SESSION[$name];
+    unset($_SESSION[$name]);
+}
+
+function redirect($path) {
+    header("Location:" . $path);
 }

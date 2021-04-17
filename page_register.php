@@ -1,5 +1,6 @@
 <?php
     session_start();
+    require 'functions.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,7 +65,7 @@
                                 <div class="card p-4 rounded-plus bg-faded">
                                     <?php if(isset($_SESSION["danger"])):?>
                                     <div class="alert alert-danger text-dark" role="alert">
-                                        <?php echo $_SESSION["danger"]; unset($_SESSION["danger"]);?>
+                                        <?php send_message("danger");?>
                                     </div>
                                     <?php endif;?>
                                     <form id="js-login" novalidate="" action="register.php" method="post">

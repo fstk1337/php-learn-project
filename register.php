@@ -1,16 +1,14 @@
 <?php
 session_start();
 require 'functions.php';
-$con = connect();
 $email = $_POST["email"];
-$emails = getEmails($con);
+$password = $_POST["password"];
 
-if (in_array($email, $emails)) {
-    $_SESSION["danger"] = "<strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.";
-    header("Location:../page_register.php");
+if (!empty(get_value("email", $email))) {
+    set_message("danger", "<strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.");
+    redirect("page_register.php");
 } else {
-    $pass = $_POST["password"];
-    makeRecord($con, $email, $pass);
-    $_SESSION["success"] = "Регистрация успешна";
-    header("Location:../page_login.php");
+    create_user($email, $password);
+    set_message("success", "Регистрация успешна");
+    redirect("page_login.php");
 }
