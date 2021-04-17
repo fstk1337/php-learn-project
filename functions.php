@@ -34,3 +34,12 @@ function send_message($name) {
 function redirect($path) {
     header("Location:" . $path);
 }
+
+function login($email, $password) {
+    $connection = connect();
+    $sql = "SELECT password FROM users WHERE email = :email";
+    $statement = $connection->prepare($sql);
+    $statement->execute(array("email" => $email));
+    $result = $statement->fetch(PDO::FETCH_COLUMN, 0);
+    return password_verify($password, $result);
+}

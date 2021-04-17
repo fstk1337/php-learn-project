@@ -42,14 +42,19 @@
                 <?php send_message("success");?>
             </div>
             <?php endif;?>
-            <form action="">
+            <?php if(isset($_SESSION["danger"])):?>
+                <div class="alert alert-danger">
+                    <?php send_message("danger");?>
+                </div>
+            <?php endif;?>
+            <form action="login.php" method="post">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
-                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="">
+                    <input type="email" id="username" name="email" class="form-control" placeholder="Эл. адрес" value="">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-control" placeholder="" >
+                    <input type="password" id="password" name="password" class="form-control" placeholder="" >
                 </div>
                 <div class="form-group text-left">
                     <div class="custom-control custom-checkbox">
