@@ -37,9 +37,15 @@ function redirect($path) {
 
 function login($email, $password) {
     $connection = connect();
-    $sql = "SELECT password FROM users WHERE email = :email";
+    $sql = "SELECT id, password FROM users WHERE email = :email";
     $statement = $connection->prepare($sql);
     $statement->execute(array("email" => $email));
-    $result = $statement->fetch(PDO::FETCH_COLUMN, 0);
-    return password_verify($password, $result);
+    $data = $statement->fetchAll(PDO::FETCH_ASSOC)[0];
+    $id = $data["id"];
+    $hash = $data["password"];
+    if (password_verify($password, $hash)) {
+        $_SESSION["id"] = $id;
+        $_SESSION["email"] = $email;
+    }
+    return password_verify($password, $hash);
 }
