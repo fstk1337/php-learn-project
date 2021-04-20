@@ -49,3 +49,31 @@ function login($email, $password) {
     }
     return password_verify($password, $hash);
 }
+
+function is_not_logged_in() {
+    return(!isset($_SESSION["id"]));
+}
+
+function get_user_id() {
+    if(isset($_SESSION["id"])) {
+        return $_SESSION["id"];
+    }
+    return 0;
+}
+
+function is_admin($id) {
+    $connection = connect();
+    $sql = "SELECT role FROM users WHERE id = :id";
+    $statement = $connection->prepare($sql);
+    $statement->execute(array("id" => $id));
+    $role = $statement->fetchAll(PDO::FETCH_COLUMN, 0)[0];
+    return ($role == "admin");
+}
+
+function get_all_users() {
+    $connection = connect();
+    $sql = "SELECT * FROM users";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
