@@ -5,6 +5,13 @@ function connect()
     return new PDO("mysql:host=localhost;dbname=project_db;charset=utf8", 'root', 'root');
 }
 
+function set_value($id, $field, $value) {
+    $connection = connect();
+    $sql = "UPDATE users SET " . $field . " = :value WHERE id = " . $id;
+    $statement = $connection->prepare($sql);
+    $statement->execute(array("value" => $value));
+}
+
 function get_value($field, $value)
 {
     $connection = connect();
@@ -14,12 +21,12 @@ function get_value($field, $value)
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
-function create_user($email, $password)
-{
+function create_user($email, $password) {
     $connection = connect();
-    $sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
+    $sql = "INSERT INTO users (email, password, role) VALUES (:email, :password, :role)";
     $statement = $connection->prepare($sql);
-    $statement->execute(array("email" => $email, "password" => password_hash($password, PASSWORD_DEFAULT)));
+    $statement->execute(array("email" => $email, "password" => password_hash($password, PASSWORD_DEFAULT), "role" => "user"));
+    return get_value("email", $email)["id"];
 }
 
 function set_message($name, $text) {
@@ -76,4 +83,53 @@ function get_all_users() {
     $statement = $connection->prepare($sql);
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function is_free($email) {
+    $find = get_value("email", $email);
+    return empty($find);
+}
+
+function edit_user_info($id, $name, $workplace, $phone, $address, $status, $avatar, $vklink, $tglink, $instalink) {
+    edit_general_info($id, $name, $workplace, $phone, $address);
+    set_status($id, $status);
+    load_avatar($id, $avatar);
+    add_social_links($id, $vklink, $tglink, $instalink);
+}
+
+function edit_general_info($id, $name, $workplace, $phone, $address) {
+    set_value($id, "name", $name);
+    set_value($id, "workplace", $workplace);
+    set_value($id, "phone", $phone);
+    set_value($id, "address", $address);
+}
+
+function set_status($id, $status) {
+    $value = "";
+    switch ($status) {
+        case "Онлайн":
+            $value = "success";
+            break;
+        case "Отошел":
+            $value = "warning";
+            break;
+        case "Не беспокоить":
+            $value = "danger";
+            break;
+    }
+    set_value($id, "status", $value);
+}
+
+function load_avatar($id, $avatar) {
+    $dir = 'img/demo/avatars/';
+    $filepath = $dir . $avatar['name'];
+    if (move_uploaded_file($avatar['tmp_name'], $filepath)) {
+        set_value($id, "avatar", $filepath);
+    }
+}
+
+function add_social_links($id, $vklink, $tglink, $instalink) {
+    set_value($id, "vklink", $vklink);
+    set_value($id, "tglink", $tglink);
+    set_value($id, "instalink", $instalink);
 }
