@@ -45,7 +45,7 @@
         <main id="js-page-content" role="main" class="page-content mt-3">
             <?php if(isset($_SESSION["success"])):?>
             <div class="alert alert-success">
-                Профиль успешно обновлен.
+                <?php send_message("success");?>
             </div>
             <?php endif;?>
             <div class="subheader">
