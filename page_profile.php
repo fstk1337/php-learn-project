@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    require 'functions.php';
+    $user = get_user_by_id($_GET["id"]);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,9 +40,14 @@
         <main id="js-page-content" role="main" class="page-content mt-3">
             <div class="subheader">
                 <h1 class="subheader-title">
-                    <i class='subheader-icon fal fa-user'></i> Иван Иванов
+                    <i class='subheader-icon fal fa-user'></i><?php echo " " . $user["name"];?>
                 </h1>
             </div>
+            <?php if(isset($_SESSION["success"])):?>
+            <div class="alert alert-success">
+                <?php send_message("success");?>
+            </div>
+            <?php endif;?>
             <div class="row">
               <div class="col-lg-6 col-xl-6 m-auto">
                     <!-- profile summary -->
@@ -45,9 +55,9 @@
                         <div class="row no-gutters row-grid">
                             <div class="col-12">
                                 <div class="d-flex flex-column align-items-center justify-content-center p-4">
-                                    <img src="img/demo/avatars/avatar-admin-lg.png" class="rounded-circle shadow-2 img-thumbnail" alt="">
+                                    <img src="<?php echo $user["avatar"];?>" class="rounded-circle shadow-2 img-thumbnail" alt="">
                                     <h5 class="mb-0 fw-700 text-center mt-3">
-                                        Иван Иванов 
+                                        <?php echo $user["name"];?>
                                         <small class="text-muted mb-0">Toronto, Canada</small>
                                     </h5>
                                     <div class="mt-4 text-center demo">
@@ -65,12 +75,12 @@
                             </div>
                             <div class="col-12">
                                 <div class="p-3 text-center">
-                                    <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                        <i class="fas fa-mobile-alt text-muted mr-2"></i> +1 317-456-2564</a>
-                                    <a href="mailto:oliver.kopyov@marlin.ru" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                        <i class="fas fa-mouse-pointer text-muted mr-2"></i> oliver.kopyov@marlin.ru</a>
+                                    <a href="tel:<?php echo $user["phone"];?>" class="mt-1 d-block fs-sm fw-400 text-dark">
+                                        <i class="fas fa-mobile-alt text-muted mr-2"></i> <?php print_phone($user["phone"]);?></a>
+                                    <a href="mailto:<?php echo $user["email"];?>" class="mt-1 d-block fs-sm fw-400 text-dark">
+                                        <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?php echo $user["email"];?></a>
                                     <address class="fs-sm fw-400 mt-4 text-muted">
-                                        <i class="fas fa-map-pin mr-2"></i> Восточные Королевства, Штормград 15
+                                        <i class="fas fa-map-pin mr-2"></i> <?php echo $user["address"];?>
                                     </address>
                                 </div>
                             </div>

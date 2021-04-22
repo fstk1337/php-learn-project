@@ -21,6 +21,10 @@ function get_value($field, $value)
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
+function get_user_by_id($id) {
+    return get_value("id", $id);
+}
+
 function create_user($email, $password) {
     $connection = connect();
     $sql = "INSERT INTO users (email, password, role) VALUES (:email, :password, :role)";
@@ -132,4 +136,8 @@ function add_social_links($id, $vklink, $tglink, $instalink) {
     set_value($id, "vklink", $vklink);
     set_value($id, "tglink", $tglink);
     set_value($id, "instalink", $instalink);
+}
+
+function print_phone($phone) {
+    echo sprintf("%s %s-%s-%s", substr($phone, 0, 2), substr($phone, 2, 3), substr($phone, 5, 3), substr($phone, 8, strlen($phone) - 8));
 }

@@ -48,6 +48,11 @@
                 <?php send_message("success");?>
             </div>
             <?php endif;?>
+            <?php if(isset($_SESSION["danger"])):?>
+            <div class="alert alert-danger">
+                <?php send_message("danger");?>
+            </div>
+            <?php endif;?>
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
@@ -121,7 +126,7 @@
                             <div class="p-3">
                                 <a href="tel:<?php echo $user["phone"];?>" class="mt-1 d-block fs-sm fw-400 text-dark">
                                     <i class="fas fa-mobile-alt text-muted mr-2"></i>
-                                    <?php echo sprintf("%s %s-%s-%s", substr($user["phone"], 0, 2), substr($user["phone"], 2, 3), substr($user["phone"], 5, 3), substr($user["phone"], 8, 4));?>
+                                    <?php print_phone($user["phone"]);?>
                                 </a>
                                 <a href="mailto:<?php echo $user["email"];?>" class="mt-1 d-block fs-sm fw-400 text-dark">
                                     <i class="fas fa-mouse-pointer text-muted mr-2"></i><?php echo " " . $user["email"];?></a>
