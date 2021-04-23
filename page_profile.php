@@ -1,6 +1,11 @@
 <?php
     session_start();
     require 'functions.php';
+    if(is_not_logged_in()) {
+        set_message("danger", "Вы не авторизованы. Пожалуйста, авторизуйтесь.");
+        redirect("page_login.php");
+        die;
+    }
     $user = get_user_by_id($_GET["id"]);
 ?>
 <!DOCTYPE html>
@@ -58,7 +63,7 @@
                                     <img src="<?php echo $user["avatar"];?>" class="rounded-circle shadow-2 img-thumbnail" alt="">
                                     <h5 class="mb-0 fw-700 text-center mt-3">
                                         <?php echo $user["name"];?>
-                                        <small class="text-muted mb-0">Toronto, Canada</small>
+                                        <small class="text-muted mb-0"><?php echo $user["address"];?></small>
                                     </h5>
                                     <div class="mt-4 text-center demo">
                                         <a href="javascript:void(0);" class="fs-xl" style="color:#C13584">
