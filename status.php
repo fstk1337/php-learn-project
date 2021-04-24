@@ -1,3 +1,20 @@
+<?php
+    session_start();
+    require 'functions.php';
+    $id = $_GET["id"];
+    if (is_not_logged_in()) {
+        set_message("danger","Вы не вошли в систему. Пожалуйста, авторизуйтесь.");
+        redirect("page_login.php");
+        die;
+    }
+    if (!is_admin(get_user_id()) && get_user_id() != $id) {
+        set_message("danger", "Вы можете редактировать только свой профиль.");
+        redirect("users.php");
+        die;
+    }
+    $user = get_user_by_id($id);
+    $options = array("success" => "Онлайн", "warning" => "Отошел", "danger" => "Не беспокоить");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +55,7 @@
             </h1>
 
         </div>
-        <form action="">
+        <form action="set_status.php?id=<?php echo $id;?>" method="post">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -52,15 +69,19 @@
                                         <!-- status -->
                                         <div class="form-group">
                                             <label class="form-label" for="example-select">Выберите статус</label>
-                                            <select class="form-control" id="example-select">
-                                                <option>Онлайн</option>
-                                                <option>Отошел</option>
-                                                <option>Не беспокоить</option>
+                                            <select class="form-control" id="example-select" name="status">
+                                                <?php foreach ($options as $option):?>
+                                                    <?php if(status_is_active($id, $option)):?>
+                                                    <option selected><?php echo $option;?></option>
+                                                    <?php else:?>
+                                                    <option><?php echo $option;?></option>
+                                                    <?php endif;?>
+                                                <?php endforeach;?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-warning">Set Status</button>
+                                        <button class="btn btn-warning" type="submit">Set Status</button>
                                     </div>
                                 </div>
                             </div>

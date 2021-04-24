@@ -146,3 +146,20 @@ function set_credentials($id, $email, $password) {
     set_value($id, "email", $email);
     set_value($id, "password", password_hash($password, PASSWORD_DEFAULT));
 }
+
+function status_is_active($id, $status) {
+    $user = get_user_by_id($id);
+    $value = "";
+    switch ($status) {
+        case "Онлайн":
+            $value = "success";
+            break;
+        case "Отошел":
+            $value = "warning";
+            break;
+        case "Не беспокоить":
+            $value = "danger";
+            break;
+    }
+    return $user["status"] == $value;
+}
