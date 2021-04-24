@@ -126,7 +126,7 @@ function set_status($id, $status) {
 
 function load_avatar($id, $avatar) {
     $dir = 'img/demo/avatars/';
-    $filepath = $dir . $avatar['name'];
+    $filepath = $dir . uniqid() . $avatar["name"];
     if (move_uploaded_file($avatar['tmp_name'], $filepath)) {
         set_value($id, "avatar", $filepath);
     }
@@ -162,4 +162,12 @@ function status_is_active($id, $status) {
             break;
     }
     return $user["status"] == $value;
+}
+
+function has_image($id) {
+    $user = get_user_by_id($id);
+    if ($user["avatar"] == null) {
+        return false;
+    }
+    return file_exists($user["avatar"]);
 }

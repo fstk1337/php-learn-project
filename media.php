@@ -1,3 +1,19 @@
+<?php
+    session_start();
+    require 'functions.php';
+    $id = $_GET["id"];
+    if (is_not_logged_in()) {
+        set_message("danger","Вы не вошли в систему. Пожалуйста, авторизуйтесь.");
+        redirect("page_login.php");
+        die;
+    }
+    if (!is_admin(get_user_id()) && get_user_id() != $id) {
+        set_message("danger", "Вы можете редактировать только свой профиль.");
+        redirect("users.php");
+        die;
+    }
+    $user = get_user_by_id($id);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +54,7 @@
             </h1>
 
         </div>
-        <form action="">
+        <form action="load_image.php?id=<?php echo $id;?>" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -48,17 +64,21 @@
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <img src="img/demo/authors/josh.png" alt="" class="img-responsive" width="200">
+                                    <?php if(has_image($id)):?>
+                                    <img src="<?php echo $user["avatar"];?>" alt="" class="img-responsive" width="200">
+                                    <?php else:?>
+                                    <img src="img/demo/avatars/avatar-m.png" alt="" class="img-responsive" width="200">
+                                    <?php endif;?>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Выберите аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <input type="file" name="avatar" id="example-fileinput" class="form-control-file">
                                 </div>
 
 
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Загрузить</button>
+                                    <button class="btn btn-warning" type="submit">Загрузить</button>
                                 </div>
                             </div>
                         </div>
