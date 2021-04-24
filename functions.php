@@ -141,3 +141,8 @@ function add_social_links($id, $vklink, $tglink, $instalink) {
 function print_phone($phone) {
     echo sprintf("%s %s-%s-%s", substr($phone, 0, 2), substr($phone, 2, 3), substr($phone, 5, 3), substr($phone, 8, strlen($phone) - 8));
 }
+
+function set_credentials($id, $email, $password) {
+    set_value($id, "email", $email);
+    set_value($id, "password", password_hash($password, PASSWORD_DEFAULT));
+}
