@@ -171,3 +171,22 @@ function has_image($id) {
     }
     return file_exists($user["avatar"]);
 }
+
+function logout() {
+    if (isset($_SESSION["id"]) && isset($_SESSION["email"])) {
+        unset($_SESSION["id"]);
+        unset($_SESSION["email"]);
+    }
+}
+
+function delete($id) {
+    if (get_user_by_id($id) == null) {
+        return false;
+    } else {
+        $connection = connect();
+        $sql = "DELETE FROM users WHERE id = " . $id;
+        $statement = $connection->prepare($sql);
+        $statement->execute();
+        return empty(get_value("id", $id));
+    }
+}

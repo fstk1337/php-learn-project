@@ -68,6 +68,11 @@
                                         <?php send_message("danger");?>
                                     </div>
                                     <?php endif;?>
+                                    <?php if(isset($_SESSION["success"])):?>
+                                    <div class="alert alert-success text-dark" role="alert">
+                                        <?php send_message("success");?>
+                                    </div>
+                                    <?php endif;?>
                                     <form id="js-login" novalidate="" action="register.php" method="post">
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>
