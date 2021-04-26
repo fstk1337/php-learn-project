@@ -13,8 +13,11 @@
         die;
     }
 
+    $image_url = get_user_by_id($id)["avatar"];
+
     if (delete($id)) {
         set_message("success", "Пользователь успешно удален.");
+        unlink($image_url);
     } else {
         set_message("danger", "Ошибка удаления пользователя.");
     }
